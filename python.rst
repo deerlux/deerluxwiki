@@ -2,7 +2,6 @@ python实用型笔记
 =================
 
 .. toctree::
-    :maxdepth: 2
     
     python_scrapy
 

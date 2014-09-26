@@ -10,8 +10,12 @@ Contents:
 
 .. toctree::
     :maxdepth: 2
-    
+    :numbered:
+   
+    git
+    python
     reST
+    Linux
 
 
 Indices and tables
