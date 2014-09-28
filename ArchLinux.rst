@@ -45,6 +45,19 @@ fcitx输入法安装与配置
 系统服务可以用 ``systemctl`` 来进行管理，系统服务开启用命令： ``systemctl
 enable <servicename>`` ，系统服务启动用 ``systemctl start <servicename>`` 。
 
+移动存储自动挂载、光驱使用等
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+udev目前是linux内核的设备管理器，包括对硬件的自动检测和热插拨设备的管理等。udev
+的使用靠的是一堆rules，在/etc/udev/rules.d目录下，但是archlinux默认的情况下这些
+rules都没有自动写上。系统的rules存储在/usr/lib/udev/rules.d目录下，最懒的办法，
+把此目录下的东西都链接到/etc/udev/rules.d目录下即可。
+
+此外，要使用移动存储设备，还需要安装udisks、udiskie、udisks2几个包。udisks2是
+udisks的升级版，但是目录一些文件管理器还不支持，比如lxde所用的pcmanfm。
+
+最后记得要把用户加入到storage组中。
+
 postgresql
 ----------
 
