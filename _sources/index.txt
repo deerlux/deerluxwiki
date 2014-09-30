@@ -16,6 +16,7 @@ Contents:
     python
     reST
     Linux
+    mybooknote/mybooknote
 
 
 Indices and tables
