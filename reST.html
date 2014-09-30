@@ -1,0 +1,140 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>3. reStructedText 学习笔记 &mdash; 路路路的学习笔记 0.01.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.01.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="路路路的学习笔记 0.01.1 documentation" href="index.html" />
+    <link rel="next" title="4. Linux安装使用与配置" href="Linux.html" />
+    <link rel="prev" title="2.1. scrapy 入门" href="python_scrapy.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="Linux.html" title="4. Linux安装使用与配置"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="python_scrapy.html" title="2.1. scrapy 入门"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">路路路的学习笔记 0.01.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="restructedtext">
+<h1>3. reStructedText 学习笔记<a class="headerlink" href="#restructedtext" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul class="simple">
+</ul>
+</div>
+<div class="section" id="toctree">
+<h2>3.1. <tt class="docutils literal"><span class="pre">toctree</span></tt> 定义目录结构<a class="headerlink" href="#toctree" title="Permalink to this headline">¶</a></h2>
+<p><tt class="docutils literal"><span class="pre">toctree</span></tt> 用来定义文档的结构， <tt class="docutils literal"><span class="pre">toctree</span></tt> 下空一行，后面的内容缩进，sphinx
+系统会自动查找目录结构下对应的 <tt class="docutils literal"><span class="pre">xx.rst</span></tt> 文档作为此文档的一部分进行生成。</p>
+<div class="highlight-rst"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5</pre></div></td><td class="code"><div class="highlight"><pre><span class="p">..</span> <span class="ow">toctree</span><span class="p">::</span>
+    <span class="nc">:maxdepth:</span> <span class="nf">2</span>
+
+    content1
+    content2
+</pre></div>
+</td></tr></table></div>
+<p>上述目录的定义，在生成的时候会自动找 <tt class="docutils literal"><span class="pre">content1</span></tt> 和 <tt class="docutils literal"><span class="pre">content2</span></tt> 对应的RST文件
+。</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">3. reStructedText 学习笔记</a><ul>
+<li><a class="reference internal" href="#toctree">3.1. <tt class="docutils literal"><span class="pre">toctree</span></tt> 定义目录结构</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="python_scrapy.html"
+                        title="previous chapter">2.1. scrapy 入门</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="Linux.html"
+                        title="next chapter">4. Linux安装使用与配置</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/reST.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="Linux.html" title="4. Linux安装使用与配置"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="python_scrapy.html" title="2.1. scrapy 入门"
+             >previous</a> |</li>
+        <li><a href="index.html">路路路的学习笔记 0.01.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, deerlux.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>
