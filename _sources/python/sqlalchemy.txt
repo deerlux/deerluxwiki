@@ -21,7 +21,7 @@ deerlux@163.com
 用来访问这两个表其实只需要简单构建两个类即可：
 
 .. literalinclude:: test_sqlalchemy.py
-    :language: pythona
+    :language: python
     :linenos:
 
 

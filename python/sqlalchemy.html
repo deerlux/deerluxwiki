@@ -110,7 +110,7 @@
 </pre></div>
 </td></tr></table></div>
 <p>用来访问这两个表其实只需要简单构建两个类即可：</p>
-<div class="highlight-pythona"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
  2
  3
  4
@@ -144,41 +144,41 @@
 32
 33
 34
-35</pre></div></td><td class="code"><div class="highlight"><pre># -*- coding=utf-8 -*-
-import sqlalchemy
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
+35</pre></div></td><td class="code"><div class="highlight"><pre><span class="c"># -*- coding=utf-8 -*-</span>
+<span class="kn">import</span> <span class="nn">sqlalchemy</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy.orm</span> <span class="kn">import</span> <span class="n">sessionmaker</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy.ext.declarative</span> <span class="kn">import</span> <span class="n">declarative_base</span>
 
-if __name__ == &quot;__main__&quot;:
-    db_user = &#39;lxq&#39;
-    db_pass = &#39;passwd&#39;
-    db_host = &#39;localhost&#39;
-    db_name = &#39;funds_data&#39;
-    engine_str = &#39;postgres://%s:%s@%s/%s&#39; % (db_user,db_pass,db_host,db_name)
-    engine = sqlalchemy.create_engine(engine_str)
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">db_user</span> <span class="o">=</span> <span class="s">&#39;lxq&#39;</span>
+    <span class="n">db_pass</span> <span class="o">=</span> <span class="s">&#39;passwd&#39;</span>
+    <span class="n">db_host</span> <span class="o">=</span> <span class="s">&#39;localhost&#39;</span>
+    <span class="n">db_name</span> <span class="o">=</span> <span class="s">&#39;funds_data&#39;</span>
+    <span class="n">engine_str</span> <span class="o">=</span> <span class="s">&#39;postgres://</span><span class="si">%s</span><span class="s">:</span><span class="si">%s</span><span class="s">@</span><span class="si">%s</span><span class="s">/</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">db_user</span><span class="p">,</span><span class="n">db_pass</span><span class="p">,</span><span class="n">db_host</span><span class="p">,</span><span class="n">db_name</span><span class="p">)</span>
+    <span class="n">engine</span> <span class="o">=</span> <span class="n">sqlalchemy</span><span class="o">.</span><span class="n">create_engine</span><span class="p">(</span><span class="n">engine_str</span><span class="p">)</span>
 
-    metadata = sqlalchemy.Metadata(bind = engine)
-    Base = declarative_base(metadata)
+    <span class="n">metadata</span> <span class="o">=</span> <span class="n">sqlalchemy</span><span class="o">.</span><span class="n">Metadata</span><span class="p">(</span><span class="n">bind</span> <span class="o">=</span> <span class="n">engine</span><span class="p">)</span>
+    <span class="n">Base</span> <span class="o">=</span> <span class="n">declarative_base</span><span class="p">(</span><span class="n">metadata</span><span class="p">)</span>
 
-    Session = sessionmaker(bind=engine)
-    session = Session()
+    <span class="n">Session</span> <span class="o">=</span> <span class="n">sessionmaker</span><span class="p">(</span><span class="n">bind</span><span class="o">=</span><span class="n">engine</span><span class="p">)</span>
+    <span class="n">session</span> <span class="o">=</span> <span class="n">Session</span><span class="p">()</span>
 
-    # 关键在下面这两个类的定义，不需要针对每个数据项单独定义一个类的列，即能
-    # 够实现简单的ORM映射。
-    class Funds_list(Base):
-        __table__ = Table(&#39;funds_list&#39;, metadata, autoload=True)
-    class Funds_value(Base):
-        __table__ = Table(&#39;funds_value&#39;, metadata, autoload = True)
+    <span class="c"># 关键在下面这两个类的定义，不需要针对每个数据项单独定义一个类的列，即能</span>
+    <span class="c"># 够实现简单的ORM映射。</span>
+    <span class="k">class</span> <span class="nc">Funds_list</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+        <span class="n">__table__</span> <span class="o">=</span> <span class="n">Table</span><span class="p">(</span><span class="s">&#39;funds_list&#39;</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">autoload</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="k">class</span> <span class="nc">Funds_value</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+        <span class="n">__table__</span> <span class="o">=</span> <span class="n">Table</span><span class="p">(</span><span class="s">&#39;funds_value&#39;</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">autoload</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
 
-    # 查询操作
-    result = session.query(Funds_value.value_data_id).filter(
-                Funds_value.fund_code == &#39;350005&#39;,
-                Funds_value.value_date == &#39;20140714&#39;).all()
+    <span class="c"># 查询操作</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">Funds_value</span><span class="o">.</span><span class="n">value_data_id</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+                <span class="n">Funds_value</span><span class="o">.</span><span class="n">fund_code</span> <span class="o">==</span> <span class="s">&#39;350005&#39;</span><span class="p">,</span>
+                <span class="n">Funds_value</span><span class="o">.</span><span class="n">value_date</span> <span class="o">==</span> <span class="s">&#39;20140714&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
 
-    # 插入操作
-    item = Fund_List(fund_code = &#39;350005&#39;, fund_name = u&#39;天治创新先锋&#39;)
-    session.add(item)
-    session.commit()
+    <span class="c"># 插入操作</span>
+    <span class="n">item</span> <span class="o">=</span> <span class="n">Fund_List</span><span class="p">(</span><span class="n">fund_code</span> <span class="o">=</span> <span class="s">&#39;350005&#39;</span><span class="p">,</span> <span class="n">fund_name</span> <span class="o">=</span> <span class="s">u&#39;天治创新先锋&#39;</span><span class="p">)</span>
+    <span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+    <span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
 </pre></div>
 </td></tr></table></div>
 <p>简单定义了两个类之后，不用关心数据表的内部实现，sqlalchemy会实现自动的映射，随
