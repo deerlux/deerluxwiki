@@ -27,6 +27,12 @@ fcitx输入法安装与配置
     export QT_IM_MODULE=fcitx
     export XMODIFIERS="@im=fcitx"
 
+在字符终端下显示中文
+~~~~~~~~~~~~~~~~~~~~
+
+异常简单，只需要安装 ``fbterm`` 即可。
+
+
 系统管理
 ---------
 

@@ -14,6 +14,7 @@ pop`` 命令将当时stash起来的东西再pop出来以便于进行合并处理
     [user]
         email = deerlux@gmail.com
         username = deerlux
+        name = deerlux
     [color]
         ui = true
     [alias]
@@ -25,4 +26,11 @@ pop`` 命令将当时stash起来的东西再pop出来以便于进行合并处理
 第一段是定义的用户一些基本信息，第二段设置了GIT的UI color后，输出的结果将更好看
 。第三段定义了一些常用的 alias。
 
+中文文件名乱码的问题
+--------------------
 
+其实git已经支持中文文件名，只是git status命令显示中文文件名还需要特殊设置一下：
+
+.. code-block:: bash
+    
+    git config --global core.quotepath false
