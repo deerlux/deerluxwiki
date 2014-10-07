@@ -62,6 +62,127 @@
 望是通过原始的SQL语句去建，这种情况下有没有一种更方便的方式去访问数据库？答案当
 然是肯定的。</p>
 <p>比如我用来抓取基金数据的库中包含两个表：</p>
+<div class="highlight-sql"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23</pre></div></td><td class="code"><div class="highlight"><pre><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">funds_list</span> <span class="p">(</span>
+      <span class="n">fund_code</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="p">,</span>
+      <span class="n">type_id</span> <span class="nb">int</span> <span class="k">DEFAULT</span> <span class="k">NULL</span><span class="p">,</span>
+      <span class="n">fund_name</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span>   <span class="k">NOT</span> <span class="k">NULL</span> <span class="p">,</span>
+      <span class="n">fund_origin_date</span> <span class="nb">date</span> <span class="k">DEFAULT</span> <span class="k">NULL</span><span class="p">,</span>
+      <span class="n">funds_company_id</span> <span class="nb">int</span> <span class="k">DEFAULT</span> <span class="k">NULL</span><span class="p">,</span>
+      <span class="k">comment</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">256</span><span class="p">)</span>   <span class="k">DEFAULT</span> <span class="k">NULL</span><span class="p">,</span>
+      <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">fund_code</span><span class="p">)</span>
+<span class="p">);</span>
+
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">funds_value</span> <span class="p">(</span>
+      <span class="n">value_data_id</span> <span class="n">bigserial</span><span class="p">,</span>
+      <span class="n">fund_code</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="p">,</span>
+      <span class="n">value_date</span> <span class="nb">date</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+      <span class="n">value_curr</span> <span class="nb">float</span> <span class="k">DEFAULT</span> <span class="k">NULL</span> <span class="p">,</span>
+      <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">value_data_id</span><span class="p">),</span>
+      <span class="k">UNIQUE</span> <span class="p">(</span><span class="n">fund_code</span><span class="p">,</span> <span class="n">value_date</span><span class="p">)</span>
+<span class="p">);</span>
+<span class="c1">--</span>
+<span class="c1">--  外键约束 funds_value</span>
+<span class="c1">--</span>
+<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">funds_value</span>
+    <span class="k">ADD</span> <span class="k">CONSTRAINT</span> <span class="n">funds_value_ibfk_2</span> <span class="k">FOREIGN</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">fund_code</span><span class="p">)</span> <span class="k">REFERENCES</span> <span class="n">funds_list</span> <span class="p">(</span><span class="n">fund_code</span><span class="p">)</span> <span class="k">ON</span> <span class="k">DELETE</span> <span class="k">CASCADE</span> <span class="k">ON</span> <span class="k">UPDATE</span> <span class="k">CASCADE</span><span class="p">;</span>
+</pre></div>
+</td></tr></table></div>
+<p>用来访问这两个表其实只需要简单构建两个类即可：</p>
+<div class="highlight-pythona"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35</pre></div></td><td class="code"><div class="highlight"><pre># -*- coding=utf-8 -*-
+import sqlalchemy
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.declarative import declarative_base
+
+if __name__ == &quot;__main__&quot;:
+    db_user = &#39;lxq&#39;
+    db_pass = &#39;passwd&#39;
+    db_host = &#39;localhost&#39;
+    db_name = &#39;funds_data&#39;
+    engine_str = &#39;postgres://%s:%s@%s/%s&#39; % (db_user,db_pass,db_host,db_name)
+    engine = sqlalchemy.create_engine(engine_str)
+
+    metadata = sqlalchemy.Metadata(bind = engine)
+    Base = declarative_base(metadata)
+
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+    # 关键在下面这两个类的定义，不需要针对每个数据项单独定义一个类的列，即能
+    # 够实现简单的ORM映射。
+    class Funds_list(Base):
+        __table__ = Table(&#39;funds_list&#39;, metadata, autoload=True)
+    class Funds_value(Base):
+        __table__ = Table(&#39;funds_value&#39;, metadata, autoload = True)
+
+    # 查询操作
+    result = session.query(Funds_value.value_data_id).filter(
+                Funds_value.fund_code == &#39;350005&#39;,
+                Funds_value.value_date == &#39;20140714&#39;).all()
+
+    # 插入操作
+    item = Fund_List(fund_code = &#39;350005&#39;, fund_name = u&#39;天治创新先锋&#39;)
+    session.add(item)
+    session.commit()
+</pre></div>
+</td></tr></table></div>
+<p>简单定义了两个类之后，不用关心数据表的内部实现，sqlalchemy会实现自动的映射，随
+后手册上的很多操作都可以正常使用了。</p>
 </div>
 
 
