@@ -5,8 +5,8 @@ python实用型笔记
 
 .. toctree::
     
-    python_scrapy
-    python_sqlalchemy
+    scrapy
+    sqlalchemy
 
 
 

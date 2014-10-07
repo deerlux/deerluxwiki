@@ -13,7 +13,7 @@ Contents:
     :numbered:
    
     git
-    python
+    python/python
     reST
     Linux
     mybooknote/mybooknote

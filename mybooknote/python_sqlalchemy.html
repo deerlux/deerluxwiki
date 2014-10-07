@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>python sqlalchemy的简单用法 &mdash; 路路路的学习笔记 0.01.1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.01.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="路路路的学习笔记 0.01.1 documentation" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="../index.html">路路路的学习笔记 0.01.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="python-sqlalchemy">
+<h1>python sqlalchemy的简单用法<a class="headerlink" href="#python-sqlalchemy" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="mailto:deerlux&#37;&#52;&#48;163&#46;com">deerlux<span>&#64;</span>163<span>&#46;</span>com</a></p>
+<p>2014年 10月 07日 星期二 21:56:41 CST</p>
+<p>说实在的，至今我还没有完全理解sqlalchemy的设计思想，前几天想自己在网上抓些东西
+然后存放在数据库中以便于后续的数据分析，只是不想自己用DB-API写SQL语句去操作数据
+库，所以才想用ORM的方式，可是看了半天sqlalchemy的文档，都是在讲如何进行建库、建
+关系等，可是问题是我们经常要操作的数据库，库表的建立并不是通过ORM的方式建，更希
+望是通过原始的SQL语句去建，这种情况下有没有一种更方便的方式去访问数据库？答案当
+然是肯定的。</p>
+<p>比如我用来抓取基金数据的库中包含两个表：</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">funds_list</span> <span class="p">(</span>
+      <span class="n">fund_code</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="p">,</span>
+      <span class="n">type_id</span> <span class="nb">int</span> <span class="k">DEFAULT</span> <span class="k">NULL</span><span class="p">,</span>
+      <span class="n">fund_name</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span>   <span class="k">NOT</span> <span class="k">NULL</span> <span class="p">,</span>
+      <span class="n">fund_origin_date</span> <span class="nb">date</span> <span class="k">DEFAULT</span> <span class="k">NULL</span><span class="p">,</span>
+      <span class="n">funds_company_id</span> <span class="nb">int</span> <span class="k">DEFAULT</span> <span class="k">NULL</span><span class="p">,</span>
+      <span class="k">comment</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">256</span><span class="p">)</span>   <span class="k">DEFAULT</span> <span class="k">NULL</span><span class="p">,</span>
+      <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">fund_code</span><span class="p">)</span>
+<span class="p">);</span>
+
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">funds_value</span> <span class="p">(</span>
+      <span class="n">value_data_id</span> <span class="n">bigserial</span><span class="p">,</span>
+      <span class="n">fund_code</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="p">,</span>
+      <span class="n">value_date</span> <span class="nb">date</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+      <span class="n">value_curr</span> <span class="nb">float</span> <span class="k">DEFAULT</span> <span class="k">NULL</span> <span class="p">,</span>
+      <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">value_data_id</span><span class="p">),</span>
+      <span class="k">UNIQUE</span> <span class="p">(</span><span class="n">fund_code</span><span class="p">,</span> <span class="n">value_date</span><span class="p">)</span>
+<span class="p">);</span>
+<span class="c1">--</span>
+<span class="c1">--  外键约束 funds_value</span>
+<span class="c1">--</span>
+<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">funds_value</span>
+    <span class="k">ADD</span> <span class="k">CONSTRAINT</span> <span class="n">funds_value_ibfk_2</span> <span class="k">FOREIGN</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">fund_code</span><span class="p">)</span> <span class="k">REFERENCES</span> <span class="n">funds_list</span> <span class="p">(</span><span class="n">fund_code</span><span class="p">)</span> <span class="k">ON</span> <span class="k">DELETE</span> <span class="k">CASCADE</span> <span class="k">ON</span> <span class="k">UPDATE</span> <span class="k">CASCADE</span><span class="p">;</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/mybooknote/python_sqlalchemy.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="../index.html">路路路的学习笔记 0.01.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, deerlux.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>
