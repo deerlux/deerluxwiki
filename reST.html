@@ -73,6 +73,54 @@
 <p>上述目录的定义，在生成的时候会自动找 <tt class="docutils literal"><span class="pre">content1</span></tt> 和 <tt class="docutils literal"><span class="pre">content2</span></tt> 对应的RST文件
 。</p>
 </div>
+<div class="section" id="id1">
+<h2>3.2. 代码高亮<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>可以用 <tt class="docutils literal"><span class="pre">..</span> <span class="pre">code-block::</span> <span class="pre">python</span></tt> 来指定后续的代码块用python的语法进行高亮显示
+（当然也可以是别的语言）。此外，在code-block指令下添加 <tt class="docutils literal"><span class="pre">:linenos:</span></tt> 用以指定显
+示行号。</p>
+<div class="highlight-rst"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6</pre></div></td><td class="code"><div class="highlight"><pre><span class="p">..</span> <span class="ow">code-block</span><span class="p">::</span> python
+    <span class="nc">:linenos:</span>
+
+    def some_function():
+        print(&quot;hello, world!&quot;)
+        print(&quot;Hello, deerlux!&quot;)
+</pre></div>
+</td></tr></table></div>
+<p>上述代码的显示效果：</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre> <span class="k">def</span> <span class="nf">some_function</span><span class="p">():</span>
+<span class="hll">    <span class="k">print</span><span class="p">(</span><span class="s">&quot;hello, world!&quot;</span><span class="p">)</span>
+</span>    <span class="k">print</span><span class="p">(</span><span class="s">&quot;Hello, deerlux!&quot;</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10</pre></div></td><td class="code"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">os.path</span>
+
+<span class="hll"><span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+</span><span class="hll">    <span class="n">tmp_filename</span> <span class="o">=</span> <span class="s">&#39;/tmp/hello.txt&#39;</span>
+</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">tmp_filename</span><span class="p">):</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&quot;hello, another&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">tmp_filename</span><span class="p">,</span><span class="s">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;hello, world&#39;</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+</div>
 </div>
 
 
@@ -85,6 +133,7 @@
   <ul>
 <li><a class="reference internal" href="#">3. reStructedText 学习笔记</a><ul>
 <li><a class="reference internal" href="#toctree">3.1. <tt class="docutils literal"><span class="pre">toctree</span></tt> 定义目录结构</a></li>
+<li><a class="reference internal" href="#id1">3.2. 代码高亮</a></li>
 </ul>
 </li>
 </ul>
