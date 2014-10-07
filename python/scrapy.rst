@@ -14,6 +14,8 @@ scrapy 入门
 
 比如想要搜关于“国庆放假”的新闻，搜出来的结果如下图所示：
 
+.. image:: _static/sina_search.png
+
 我是想把所有搜出来的新闻打开后抓取其标题、新闻来源、发布时间、新闻正文，然后把
 相关的内容存储起来准备分析处理，当然不能只抓取搜出来的第一页，而是要把所有的“下
 一页”遍历一遍，再抓取。
@@ -52,6 +54,7 @@ Spider是抓取的主力军，这个类最为关键，这个类相关的文件�
 手动新建一个，取名为sinanews_spider.py：
 
 .. code-block:: python
+    :linenos:
     
     #  -*- coding=utf8 -*-
     from scrapy.contrib.spiders import CrawlSpider, Rule
