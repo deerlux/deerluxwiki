@@ -16,4 +16,15 @@ deerlux@163.com
 
 .. literalinclude:: funds_value.sql
     :language: sql
+    :linenos:
+
+用来访问这两个表其实只需要简单构建两个类即可：
+
+.. literalinclude:: test_sqlalchemy.py
+    :language: pythona
+    :linenos:
+
+
+简单定义了两个类之后，不用关心数据表的内部实现，sqlalchemy会实现自动的映射，随
+后手册上的很多操作都可以正常使用了。
 
