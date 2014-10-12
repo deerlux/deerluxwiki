@@ -34,3 +34,17 @@ pop`` 命令将当时stash起来的东西再pop出来以便于进行合并处理
 .. code-block:: bash
     
     git config --global core.quotepath false
+
+最后一次提交的后悔药
+--------------------
+
+利用下面的命令可以将最后一次提交的内容重新回到暂存区：
+
+.. code-block:: bash
+    
+    git reset --soft HEAD^
+
+``HEAD`` 指向的是当前最新的版本， ``HEAD^`` 指向的是最新版本的上一个版本，同样
+``HEAD^^`` 指向的是最新版本的上两个版本。如果想让最后一次提交的内容重新回到工作
+区而非暂存区，则去掉 ``--soft`` 参数。
+

@@ -15,7 +15,7 @@ ArchLinux安装与配置
 
 
 fcitx输入法安装与配置
-~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
 
 #. fcitx下要安装fcitx-gtk2等与界面相关的包，才可以在相应的界面下输入。
 #. fcitx如果是用GDM、KDM等登录，需要修改 ``~/.xprofile`` 文件才可以正常使用：
@@ -52,7 +52,7 @@ fcitx输入法安装与配置
 enable <servicename>`` ，系统服务启动用 ``systemctl start <servicename>`` 。
 
 移动存储自动挂载、光驱使用等
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 udev目前是linux内核的设备管理器，包括对硬件的自动检测和热插拨设备的管理等。udev
 的使用靠的是一堆rules，在/etc/udev/rules.d目录下，但是archlinux默认的情况下这些
@@ -65,7 +65,14 @@ udisks的升级版，但是目录一些文件管理器还不支持，比如lxde�
 最后记得要把用户加入到storage组中。
 
 postgresql
-----------
+-----------
+
+postgresql 是一款技术上非常先进的开源数据库管理系统，内置perl、python等语言的编
+程支持，并且在性能上也不输于mysql，随着mysql被oracle收购，这款数据库管理系统在
+网站建设中应用也越来越广泛。
+
+安装
+~~~~
 
 postgresql 安装后要对进行数据库的初始化，否则数据库服务启动不起来，运行：
 
@@ -75,3 +82,21 @@ postgresql 安装后要对进行数据库的初始化，否则数据库服务启
     
 然后便可以用 ``systemctl enable postgresql`` 将系统服务自动启动。
 
+建立角色（用户）
+~~~~~~~~~~~~~~~~
+
+postgresql 缺省的管理员账号为 ``postgres`` ，安装完postgresql数据库服务后系统一般会自动建立这个账户，使用这个用户对角色（即用户）进行管
+理，这样可以使用非管理员用户进行数据库相关的操作，从安全方面考虑，不要试图更改 ``postgres`` 这个账户的密码而是直接用sudo执行相关的操作。执行下面的命令进入管理员shell：
+
+.. code-block:: sh
+
+    sudo -u postgres psql
+
+然后运行：
+
+.. code-block:: sql
+    
+    create role username with login createdb password 'mypassword';
+
+这样便建立了一个 ``username`` 的用户，其密码为 ``mypassword`` ，记住login和
+createdb权限要打开，否则这个用户即不能登录也不能创建数据库。
